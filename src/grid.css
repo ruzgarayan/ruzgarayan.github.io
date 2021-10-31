@@ -1,0 +1,71 @@
+.container {
+  display: grid;
+  grid-template-columns: 200px 200px 150px 100px;
+  grid-template-rows: 200px 200px 200px;
+  gap: 0px 10px;
+  grid-auto-flow: row;
+  grid-template-areas:
+    "MainCanvas MainCanvas Selection Color"
+    "MainCanvas MainCanvas Utility Color"
+    "Layers Layers . .";
+}
+
+.MainCanvas { grid-area: MainCanvas; }
+
+.Utility {
+  display: grid;
+  grid-template-columns: 150px;
+  grid-template-rows: 80px 60px 80px;
+  gap: 0px 0px;
+  grid-auto-flow: row;
+  grid-template-areas:
+    "Utility1"
+    "Utility2"
+    "Utility3";
+  grid-area: Utility;
+}
+
+.Utility1 { grid-area: Utility1; }
+
+.Utility2 { grid-area: Utility2; }
+
+.Utility3 {
+
+  grid-area: Utility3;
+  width: 250px;
+}
+
+.Selection { grid-area: Selection; }
+
+.Layers { grid-area: Layers; }
+
+.Color {
+
+  grid-area: Color;
+  height: 330px;
+}
+
+
+
+
+.box {border:2px solid #0094ff;}
+.box h2 {background:#0094ff;color:white; font-size:15px; margin-top: 0px;}
+.box p {color:#333;}
+.box {
+	text-align:center;
+    -moz-border-radius-topright:5px;
+    -moz-border-radius-topleft:5px;
+    -webkit-border-top-right-radius:5px;
+    -webkit-border-top-left-radius:5px;
+	
+	
+    -moz-border-radius-bottomright:5px;
+    -moz-border-radius-bottomleft:5px;
+    -webkit-border-bottom-right-radius:5px;
+    -webkit-border-bottom-left-radius:5px;
+}
+
+
+.borderedDiv {
+    border: 1px solid #000000;
+}

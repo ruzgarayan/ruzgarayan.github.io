@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<link rel="stylesheet" href="grid.css">
+</head>
+
+
+<script id="vertex-shader" type="x-shader/x-vertex">
+
+attribute vec4 vPosition;
+attribute vec4 vColor;
+
+varying vec4 fColor;
+
+void
+main()
+{
+    gl_Position = vPosition;
+    fColor = vColor;
+}
+</script>
+
+<script id="fragment-shader" type="x-shader/x-fragment">
+
+precision mediump float;
+varying vec4 fColor;
+
+void
+main()
+{
+    gl_FragColor = fColor;
+}
+</script>
+
+
+<script id="fragment-shader-color-picker" type="x-shader/x-fragment">
+
+precision mediump float;
+varying vec4 fColor;
+uniform float u_hue;
+
+//Reference https://gist.github.com/983/e170a24ae8eba2cd174f
+vec3 hsv2rgb(vec3 c)
+{
+    vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
+    vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);
+    return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
+}
+
+void
+main()
+{
+	vec2 loc = gl_FragCoord.xy / vec2(90.0, 170.0);	
+	vec3 rgb = hsv2rgb(vec3(u_hue, loc.x, loc.y));
+    gl_FragColor = vec4(rgb.x, rgb.y, rgb.z, 1.0);
+	//;
+}
+</script>
+
+<script type="text/javascript" src="../Common/webgl-utils.js"></script>
+<script type="text/javascript" src="../Common/initShaders.js"></script>
+<script type="text/javascript" src="../Common/MV.js"></script>
+<script type="text/javascript" src="paint.js"></script>
+<script type="text/javascript" src="shapes.js"></script>
+<script type="text/javascript" src="layers.js"></script>
+<script type="text/javascript" src="preview.js"></script>
+<script type="text/javascript" src="copypaste.js"></script>
+<script type="text/javascript" src="fasterase.js"></script>
+
+<body>
+
+<div class="container">
+  <div class="MainCanvas">
+	<canvas id="gl-canvas" width="400" height="400" style="cursor: none;">>
+		Oops ... your browser doesn't support the HTML5 canvas element
+	</canvas>
+  </div>
+  
+  
+  <div class="Selection box">
+	<h2>Draw Options</h2>
+	<select id="Controls" size="8">
+		<option value="0">Pen</option>
+		<option value="1">Eraser</option>
+		<option value="2">Filled Rectangle</option>
+		<option value="3">Unfilled Rectangle</option>
+		<option value="4">Filled Triangle</option>
+		<option value="5">Unfilled Triangle</option>
+		<option value="6">Filled Ellipse</option>
+		<option value="7">Unfilled Ellipse</option>
+	</select>
+	<p id="selectedOption" style="font-size: 12px;">Selected: Pen</p>
+  </div>
+  
+  
+  <div class="Utility">
+  
+    <div class="Utility1 box">
+		<h2>Actions</h2>
+		<button id="UndoButton">Undo</button>
+		<button id="RedoButton">Redo</button>
+		<br/>
+		<button id="ClearButton">Clear Canvas</button>
+	</div>
+	
+	
+    <div class="Utility2 box">
+		<h2>Copy-Paste</h2>
+		<button id="CopyButton">Copy</button>
+		<button id="PasteButton">Paste</button>
+	</div>
+	
+	<hr class="dotted">
+	
+    <div class="Utility3 box">
+		<h2>Save-Load</h2>
+		<button id="DownloadButton">Save</button>
+		<input type="file" name="InputFile" id="InputFile">	
+	</div>
+	
+  </div>
+  
+  <div class="Color box">
+	  <h2>Color</h2>
+	  
+		<input id="slide" type="range" min="0" max="100" step="1" value="50" style="width: 95px;" />
+		<canvas id="gl-canvas-color-picker" width="90" height="170">>
+			Oops ... your browser doesn't support the HTML5 canvas element
+		</canvas>
+	  
+		<div>
+		<button id="ColorButton0" style="background-color: black; width: 20px; height: 20px"></button>
+		<button id="ColorButton1" style="background-color: aqua; width: 20px; height: 20px"></button>
+		<button id="ColorButton2" style="background-color: #006400; width: 20px; height: 20px"></button>
+		<button id="ColorButton3" style="background-color: orange; width: 20px; height: 20px"></button>
+		<br/>
+		<button id="ColorButton4" style="background-color: gray; width: 20px; height: 20px"></button>
+		<button id="ColorButton5" style="background-color: red; width: 20px; height: 20px"></button>
+		<button id="ColorButton6" style="background-color: yellow; width: 20px; height: 20px"></button>
+		<button id="ColorButton7" style="background-color: white; width: 20px; height: 20px"></button>
+		</div>
+		Chosen Color: <button id="ColorButtonChosen" style="background-color: white; width: 40px; height: 40px"></button>
+	  
+  </div>
+  
+  
+  <div class="Layers box">
+	<h2>Layer Options</h2>
+	<table>
+	  <tr>
+		<th>Current</th>
+		<th>Show</th>
+		<th>Select</th>
+		<th>Move</th>
+	  </tr>
+	  <tr style="height: 35px;">
+		<td><div id="Layer1Text" style="font-size: 25px;"></div></td>
+		<td>	<input type="checkbox" id="Layer1Show" checked>	</td>
+		<td>	<button id="Layer1">Select Layer 1</button>	</td>
+		<td>	<button id="Layer1Down">Down</button>	</td>
+	  </tr>
+	  
+	  <tr style="height: 35px;">
+		<td><div id="Layer2Text" style="font-size: 25px;"></div></td>
+		<td>	<input type="checkbox" id="Layer2Show" checked>	</td>
+		<td>	<button id="Layer2">Select Layer 2</Button>	</td>
+		<td>	<button id="Layer2Up">Up</button> <button id="Layer2Down">Down</button> </td>
+	  </tr>
+	  
+	  <tr style="height: 35px;">
+		<td><div id="Layer3Text" style="font-size: 25px;"></div></td>
+		<td>	<input type="checkbox" id="Layer3Show" checked>	</td>
+		<td>	<button id="Layer3">Select Layer 3</button>	</td>
+		<td>	<button id="Layer3Up">Up</button> <button id="Layer3Down">Down</button>	</td>
+	  </tr>
+	  
+	  <tr style="height: 35px;">
+		<td><div id="Layer4Text" style="font-size: 25px;"></div></td>
+		<td>	<input type="checkbox" id="Layer4Show" checked>	</td>
+		<td>	<button id="Layer4">Select Layer 4</button>	</td>
+		<td>	<button id="Layer4Up">Up</Button>	</td>
+	  </tr>
+	</table>
+  </div>
+  
+</div>
+
+
+
+</body>
+</html>
