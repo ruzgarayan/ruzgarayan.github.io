@@ -138,7 +138,7 @@ window.onload = function init() {
 			gl.bindBuffer( gl.ARRAY_BUFFER, cBuffer );
 			gl.bufferSubData(gl.ARRAY_BUFFER, 0, flatten(all_vertex_colors.flat()));
 			
-			render();
+			rebuffer_render();
 		}
 	})
 	
