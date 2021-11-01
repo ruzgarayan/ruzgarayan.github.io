@@ -287,6 +287,7 @@ function mouseupAction(ev) {
 				var num_vertices = curr_vertices.length;
 			
 				var new_stroke_vertices = [];
+				var new_stroke_colors = [];
 				
 				//Go over all the vertices to decide which of them are deleted
 				for (var j = 0; j < num_vertices; j += 3) {
