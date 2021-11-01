@@ -283,6 +283,7 @@ function mouseupAction(ev) {
 				
 				var curr_stroke_id = strokes[i].properties.id;
 				var curr_vertices = strokes[i].vertices;
+				var curr_colors = strokes[i].colors;
 				var num_vertices = curr_vertices.length;
 			
 				var new_stroke_vertices = [];
@@ -313,9 +314,13 @@ function mouseupAction(ev) {
 						stroke_vertices.push({vertex: curr_vertices[j + 2], stroke_id: curr_stroke_id});
 					} else {
 						new_stroke_vertices.push(curr_vertices[j], curr_vertices[j + 1], curr_vertices[j + 2]);
+						if (strokes[i].properties.type === "Paste")
+							new_stroke_colors.push(curr_colors[j], curr_colors[j + 1], curr_colors[j + 2]);
 					}
 				}
 				strokes[i].vertices = new_stroke_vertices;
+				if (strokes[i].properties.type === "Paste")
+					strokes[i].colors = new_stroke_colors;
 			}
 		}
 		
@@ -467,9 +472,11 @@ function click(x, y, rect, gl) {
 			
 			var curr_stroke_id = strokes[i].properties.id;
 			var curr_vertices = strokes[i].vertices;
+			var curr_colors = strokes[i].colors;
 			var num_vertices = curr_vertices.length;
 		
 			var new_stroke_vertices = [];
+			var new_stroke_colors = [];
 		
 			for (var j = 0; j < num_vertices - 1; j += 3) {
 				var pixelX = (curr_vertices[j][0] + 1) * 200;
@@ -483,9 +490,13 @@ function click(x, y, rect, gl) {
 					stroke_vertices.push({vertex: curr_vertices[j + 2], stroke_id: curr_stroke_id});
 				} else {
 					new_stroke_vertices.push(curr_vertices[j], curr_vertices[j + 1], curr_vertices[j + 2]);
+					if (strokes[i].properties.type === "Paste")
+						new_stroke_colors.push(curr_colors[j], curr_colors[j + 1], curr_colors[j + 2]);
 				}
 			}
 			strokes[i].vertices = new_stroke_vertices;
+			if (strokes[i].properties.type === "Paste")
+				strokes[i].colors = new_stroke_colors;
 		}
 	}
 }
