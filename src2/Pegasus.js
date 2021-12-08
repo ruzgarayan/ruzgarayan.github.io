@@ -161,6 +161,7 @@ var lastMousePos;
 var lightPosition = vec4(0.0, 10.0, 0.0, 0.0 );
 var ambientLight = vec3(0.1, 0.1, 0.1);
 var shininess = 10.0;
+var lightingRatio = 0.3;
 
 //-------------------------------------------
 
@@ -806,6 +807,15 @@ function initSliders() {
 				initNodes(torsoId); //TODO fix, this is because changing global coordinates do not update the torso
 		});
 	}
+	
+	const lightingRatioSlider = document.getElementById("lightingRatioSlider");
+	console.log(lightingRatioSlider);
+	lightingRatioSlider.addEventListener('input', function() {
+		lightingRatio = event.srcElement.value;
+		gl.uniform1f(gl.getUniformLocation(program, 
+		   "lightingRatio"),lightingRatio);
+		   console.log("here");
+	});
 }
 
 window.onload = function init() {
@@ -872,6 +882,8 @@ window.onload = function init() {
        flatten(lightPosition));
     gl.uniform1f(gl.getUniformLocation(program, 
        "shininess"),shininess);
+    gl.uniform1f(gl.getUniformLocation(program, 
+       "lightingRatio"),lightingRatio);
 	
 	defineSliders();
 	initSliders();

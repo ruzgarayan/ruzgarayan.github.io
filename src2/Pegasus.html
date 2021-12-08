@@ -16,6 +16,8 @@ uniform vec3 ambientLight;
 uniform vec4 lightPosition;
 uniform float shininess;
 
+uniform float lightingRatio;
+
 void main() 
 {
 	mat4 modelViewMatrix = viewMatrix * modelMatrix;
@@ -36,7 +38,7 @@ void main()
 	
 	//This is like taking a linear combination of the original colors of the horse and the light
 	//Couldn't make it work by giving different components for light
-    fColor = 0.7 * vColor + 0.3 * vec4((diffuseLightV+ambientLight+specularLightV),1);
+    fColor = (1.0 - lightingRatio) * vColor + lightingRatio * vec4((diffuseLightV+ambientLight+specularLightV),1);
 	fColor.x = min(fColor.x, 1.0);
 	fColor.y = min(fColor.y, 1.0);
 	fColor.z = min(fColor.z, 1.0);
@@ -100,7 +102,8 @@ void main()
 			<button id="startAnimationButton">Start</button>
 			<button id="stopAnimationButton">Stop</button>
 			<button id="saveAnimationButton">Save</button>
-			<input type="file" name="InputFile" id="loadAnimationButton">	
+			Load: <input type="file" name="InputFile" id="loadAnimationButton">	
+			Set Lighting Level: <input id="lightingRatioSlider" type="range" min="0" max="0.6" step="0.01" value="0.3"/>
 		</div>
 
 		<section  id="keyframesDiv" class='FlexContainer'>
