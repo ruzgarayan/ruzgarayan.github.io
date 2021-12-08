@@ -1,0 +1,230 @@
+.FlexContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+    align-content: flex-start;
+    width: 100%;
+    background-color: DarkSlateGrey;
+    min-height: 100px;
+    overflow: auto;
+    flex-direction: row;
+}
+
+.KeyframeDiv {
+    width: 200px;
+    height: 100px;
+    margin-right: 25px;
+    background-color: DarkSlateBlue;
+	color: white;
+}
+
+.FlexDiv {
+	display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+    align-content: flex-start;
+    flex-direction: row;
+}
+
+/*General grid*/
+.container {
+  display: grid;
+  grid-template-columns: 512px 512px 512px;
+  grid-template-rows: 288px 288px 288px;
+  gap: 10px 0px;
+  grid-auto-flow: row;
+  grid-template-areas:
+    "CanvasDiv CanvasDiv SlidersDiv"
+    "CanvasDiv CanvasDiv SlidersDiv"
+    "AnimationDiv AnimationDiv AnimationDiv";
+}
+
+.CanvasDiv { grid-area: CanvasDiv; }
+
+.SlidersDiv { grid-area: SlidersDiv; }
+
+.AnimationDiv { grid-area: AnimationDiv; }
+
+/*Keyframe grid*/
+.containerKeyframe {
+  display: grid;
+  grid-template-columns: 20px 180px 20px;
+  grid-template-rows: 30px 30px 40px;
+  gap: 0px 0px;
+  grid-auto-flow: row;
+  grid-template-areas:
+    "LeftButton KeyframeNameDiv RightButton"
+    "LeftButton KeyframeDurDiv RightButton"
+    "LeftButton KeyframeButtonsDiv RightButton";
+}
+
+
+.LeftButton { grid-area: LeftButton; }
+
+.RightButton { grid-area: RightButton; }
+
+.KeyframeNameDiv { grid-area: KeyframeNameDiv; }
+.KeyframeDurDiv { grid-area: KeyframeDurDiv; }
+.KeyframeButtonsDiv { grid-area: KeyframeButtonsDiv; }
+
+
+/* CSS Reference: https://getcssscan.com/css-buttons-examples*/
+.styledButton {
+  align-items: center;
+  background-color: DarkSlateGrey;
+  border: 0;
+  border-radius: 50px;
+  box-sizing: border-box;
+  color: #ffffff;
+  cursor: pointer;
+  display: inline-flex;
+  font-family: -apple-system, system-ui, system-ui, "Segoe UI", Roboto, "Helvetica Neue", "Fira Sans", Ubuntu, Oxygen, "Oxygen Sans", Cantarell, "Droid Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Lucida Grande", Helvetica, Arial, sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  justify-content: center;
+  line-height: 20px;
+  max-width: 480px;
+  min-height: 20px;
+  min-width: 0px;
+  overflow: hidden;
+  padding: 0px;
+  padding-left: 5px;
+  padding-right: 5px;
+  text-align: center;
+  touch-action: manipulation;
+  transition: background-color 0.167s cubic-bezier(0.4, 0, 0.2, 1) 0s, box-shadow 0.167s cubic-bezier(0.4, 0, 0.2, 1) 0s, color 0.167s cubic-bezier(0.4, 0, 0.2, 1) 0s;
+  user-select: none;
+  -webkit-user-select: none;
+  vertical-align: middle;
+}
+
+.styledButton:hover,
+.styledButton:focus { 
+  background-color: #16437E;
+  color: #ffffff;
+}
+
+.styledButton:active {
+  background: #09223b;
+  color: rgb(255, 255, 255, .7);
+}
+
+.styledButton:disabled { 
+  cursor: not-allowed;
+  background: rgba(0, 0, 0, .08);
+  color: rgba(0, 0, 0, .3);
+}
+
+/*Triangle buttons from https://csslayout.io/triangle-buttons/ */
+.containerButton {
+
+	background-color: DimGrey;
+	width: 20px;
+	height: 100px;
+}
+
+.containerButton__triangle {
+	border-style: solid;
+
+	/* Size */
+	height: 0px;
+	width: 0px;
+}
+
+.containerButton__triangle--up {
+	border-color: transparent transparent rgba(0, 0, 0, 0.3);
+	border-width: 0px 8px 8px;
+}
+
+.containerButton__triangle--right {
+	border-color: transparent transparent transparent rgba(0, 0, 0, 0.3);
+	border-width: 8px 0px 8px 8px;
+}
+
+.containerButton__triangle--down {
+	border-color: rgba(0, 0, 0, 0.3) transparent transparent;
+	border-width: 8px 8px 0px;
+}
+
+.containerButton__triangle--left {
+	border-color: transparent rgba(0, 0, 0, 0.3) transparent transparent;
+	border-width: 8px 8px 8px 0px;
+}
+
+
+
+/*Below is input range style Reference: https://freefrontend.com/css-range-sliders/ */
+input[type="range"] { 
+    margin: auto;
+    -webkit-appearance: none;
+    position: relative;
+    overflow: hidden;
+    height: 20px;
+    width: 200px;
+    cursor: pointer;
+    border-radius: 0; /* iOS */
+}
+
+::-webkit-slider-runnable-track {
+    background: #ddd;
+}
+
+/*
+ * 1. Set to 0 width and remove border for a slider without a thumb
+ */
+::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px; /* 1 */
+    height: 80px;
+    background: #fff;
+    box-shadow: -100vw 0 0 100vw dodgerblue;
+    border: 2px solid #999; /* 1 */
+}
+
+::-moz-range-track {
+    height: 80px;
+    background: #ddd;
+}
+
+::-moz-range-thumb {
+    background: #fff;
+    height: 80px;
+    width: 20px;
+    border: 3px solid #999;
+    border-radius: 0 !important;
+    box-shadow: -100vw 0 0 100vw dodgerblue;
+    box-sizing: border-box;
+}
+
+::-ms-fill-lower { 
+    background: dodgerblue;
+}
+
+::-ms-thumb { 
+    background: #fff;
+    border: 2px solid #999;
+    height: 80px;
+    width: 20px;
+    box-sizing: border-box;
+}
+
+::-ms-ticks-after { 
+    display: none; 
+}
+
+::-ms-ticks-before { 
+    display: none; 
+}
+
+::-ms-track { 
+    background: #ddd;
+    color: transparent;
+    height: 80px;
+    border: none;
+}
+
+::-ms-tooltip { 
+    display: none;
+}

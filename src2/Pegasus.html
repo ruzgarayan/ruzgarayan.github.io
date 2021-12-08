@@ -1,0 +1,119 @@
+<html>
+
+
+<script id="vertex-shader" type="x-shader/x-vertex">
+
+attribute vec4 vPosition;
+attribute vec3 vNormal;
+attribute vec4 vColor;
+varying vec4 fColor;
+
+uniform mat4 modelMatrix;
+uniform mat4 viewMatrix;
+uniform mat4 projectionMatrix;
+
+uniform vec3 ambientLight;
+uniform vec4 lightPosition;
+uniform float shininess;
+
+void main() 
+{
+	mat4 modelViewMatrix = viewMatrix * modelMatrix;
+
+	vec3 pos = (modelMatrix*vPosition).xyz;
+	vec3 L = normalize(lightPosition.xyz - pos);
+	vec3 E = -normalize(pos);
+	vec3 H = normalize(L+E);
+	vec3 N = normalize(modelMatrix*vec4(vNormal, 0.0)).xyz;
+	float diffuseLight = max( dot(L,N), 0.0 );
+	float specularLight = pow ( max(dot(N,H), 0.0), shininess);
+	vec3 diffuseLightV = vec3(diffuseLight,diffuseLight,diffuseLight);
+	vec3 specularLightV = vec3(specularLight,specularLight,specularLight);
+	
+	if( dot(L, N) < 0.0 ) {
+		specularLightV = vec3(0.0, 0.0, 0.0);
+    } 
+	
+	//This is like taking a linear combination of the original colors of the horse and the light
+	//Couldn't make it work by giving different components for light
+    fColor = 0.7 * vColor + 0.3 * vec4((diffuseLightV+ambientLight+specularLightV),1);
+	fColor.x = min(fColor.x, 1.0);
+	fColor.y = min(fColor.y, 1.0);
+	fColor.z = min(fColor.z, 1.0);
+	fColor.w = 1.0;
+    gl_Position = projectionMatrix*modelViewMatrix*vPosition;
+} 
+</script>
+
+<script id="fragment-shader" type="x-shader/x-fragment">
+
+precision mediump float;
+varying  vec4 fColor;
+
+void main()
+{
+    gl_FragColor = fColor;
+
+}
+</script>
+
+
+
+<script type="text/javascript" src="../Common/webgl-utils.js"></script>
+<script type="text/javascript" src="../Common/InitShaders.js"></script>
+<script type="text/javascript" src="../Common/MV.js"></script>
+<script type="text/javascript" src="Pegasus.js"></script>
+<script type="text/javascript" src="animation.js"></script>
+<link rel='stylesheet' href='./styles.css' type='text/css' />
+
+<body>
+
+<div class="container" style="background-color: azure;">
+	<div class="CanvasDiv"> 
+		<canvas id="gl-canvas" width="1024" height="576"
+		Oops ... your browser doesn't support the HTML5 canvas element
+		</canvas>
+	</div>
+	<div class="SlidersDiv" id="SlidersDiv">
+		<table style="width: 100%">
+		  <colgroup>
+		   <col span="1" style="width: 40%;">
+		   <col span="1" style="width: 5%;">
+		   <col span="1" style="width: 50%;">
+		   <col span="1" style="width: 5%;">
+		</colgroup>
+		<tbody id="slidersTable">
+			<tr>
+				<td>Name</td>
+				<td>Min</td>
+				<td>Value</td>
+				<td>Max</td>
+			</tr>
+		</tbody>
+		</table>
+	
+	</div>
+	<div class="AnimationDiv">
+		<div id="animationButtonsDiv" style="margin-bottom:10px">
+			<button id="addKeyframeButton">Add Keyframe</button>
+			<input type="checkbox" id="enableLoop" name="enableLoop"> <label for="enableLoop">Enable Loop</label>
+			<button id="startAnimationButton">Start</button>
+			<button id="stopAnimationButton">Stop</button>
+			<button id="saveAnimationButton">Save</button>
+			<input type="file" name="InputFile" id="loadAnimationButton">	
+		</div>
+
+		<section  id="keyframesDiv" class='FlexContainer'>
+		</section>
+
+		<div id="animationSliderDiv">
+			<input id="animationSlider" type="range" min="0" max="1000" step="1" value="0" style="width: 100%; height:80px;"/>
+		</div>
+	</div>
+</div>
+
+
+</body>
+
+
+</html>
