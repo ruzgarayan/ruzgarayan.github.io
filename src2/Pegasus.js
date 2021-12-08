@@ -753,16 +753,16 @@ function defineSliders() {
 	sliders.push({name:"Neck Angle", id:neckId, min:-30, max:75, val:0})
     sliders.push({name:"Neck 2 Angle", id:neck2Id, min:-60, max:60, val:0})
 	sliders.push({name:"Left Upper Arm Angle", id:leftUpperArmId, min:-50, max:50, val:0})
-	sliders.push({name:"Left Lower Arm Angle", id:leftLowerArmId, min:-60, max:60, val:0})
+	sliders.push({name:"Left Lower Arm Angle", id:leftLowerArmId, min:0, max:60, val:0})
 	sliders.push({name:"Right Upper Arm Angle", id:rightUpperArmId, min:-50, max:50, val:0})
-	sliders.push({name:"Right Lower Arm Angle", id:rightLowerArmId, min:-60, max:50, val:0})
+	sliders.push({name:"Right Lower Arm Angle", id:rightLowerArmId, min:0, max:60, val:0})
 	sliders.push({name:"Left Upper Leg Angle", id:leftUpperLegId, min:-40, max:65, val:0})
-	sliders.push({name:"Left Lower Leg Angle", id:leftLowerLegId, min:-40, max:40, val:0})
+	sliders.push({name:"Left Lower Leg Angle", id:leftLowerLegId, min:-40, max:0, val:0})
     sliders.push({name:"Right Upper Leg Angle", id:rightUpperLegId, min:-40, max:65, val:0})
-    sliders.push({name:"Right Lower Leg Angle", id:rightLowerLegId, min:-40, max:40, val:0})
-	sliders.push({name:"Left Upper Wing Angle", id:leftUpperWingId, min:-20, max:60, val:0})
+    sliders.push({name:"Right Lower Leg Angle", id:rightLowerLegId, min:-40, max:0, val:0})
+	sliders.push({name:"Left Upper Wing Angle", id:leftUpperWingId, min:-30, max:60, val:0})
     sliders.push({name:"Left Lower Wing Angle", id:leftLowerWingId, min:-90, max:0, val:0})
-    sliders.push({name:"Right Upper Wing Angle", id:rightUpperWingId, min:-20, max:60, val:0})
+    sliders.push({name:"Right Upper Wing Angle", id:rightUpperWingId, min:-30, max:60, val:0})
 	sliders.push({name:"Right Lower Wing Angle", id:rightLowerWingId, min:-90, max:0, val:0})
     sliders.push({name:"Upper Tail Angle", id:upperTailId, min:0, max:90, val:0})
     sliders.push({name:"Lower Tail Angle", id:lowerTailId, min:-60, max:45, val:0})
@@ -781,7 +781,7 @@ function initSliders() {
 		newSlider.setAttribute("value", val);
 		newSlider.setAttribute("min", sliderInfo.min);
 		newSlider.setAttribute("max", sliderInfo.max);
-		newSlider.setAttribute("step", 1);
+		newSlider.setAttribute("step", 0.01);
 		newSlider.setAttribute("type", "range");
 		newSlider.setAttribute("id", "slider"+sliderInfo.id);
 		
