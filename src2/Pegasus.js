@@ -120,7 +120,7 @@ var numNodes = 18;
 var numAngles = 17;
 var angle = 0;
 
-var theta = [0, 20, 0, 0, 0, 0, 10, -20, 10, -20, 0, 0, 20, -40, 20, -40, 0, 0, 0, 1, 0, 0, 0];
+var theta = [0, 20, 0, 0, 0, 0, 10, -20, 10, -20, 0, 0, 20, -40, 20, -40, 0, 0, 0, 0.2, 0, 0, 0];
 var sliders = [];
 
 var numVertices = 24;
@@ -142,7 +142,7 @@ var radius = 50.0;
 var eye;
 const at = vec3(0.0, 0.0, 0.0);
 const up = vec3(0.0, 1.0, 0.0);
-var phi = Math.PI/6, psi = Math.PI/6;
+var phi = Math.PI/5, psi = Math.PI/2;
 
 var near = 0.3;
 var far = 2000.0;
@@ -446,6 +446,7 @@ function leftUpperWing(){
 }
 
 function leftLowerWing(){
+	wingEnd(0);
     instanceMatrix = mult(modelViewMatrix, translate(lowerWingWidth/2, lowerWingHeight/2, 0.0 ));
     instanceMatrix = mult(instanceMatrix, scale4(lowerWingWidth, lowerWingHeight, lowerWingLength) );
     setModelViewMatrix(instanceMatrix);
@@ -462,6 +463,7 @@ function rightUpperWing(){
 }
 
 function rightLowerWing(){
+	wingEnd(1);
     instanceMatrix = mult(modelViewMatrix, translate(-lowerWingWidth/2, lowerWingHeight/2, 0.0 ));
     instanceMatrix = mult(instanceMatrix, scale4(lowerWingWidth, lowerWingHeight, lowerWingLength) );
     setModelViewMatrix(instanceMatrix);
@@ -542,6 +544,28 @@ function hoof(leg){
     instanceMatrix = mult(instanceMatrix, scale4(.51, .51, .51) )
     setModelViewMatrix(instanceMatrix);
     drawColoredCube(colouredFace(6, vertexColors[0]));
+}
+
+function wingEnd(wing){
+    height = wing ? leftLowerWing : lowerArmHeight;
+	
+	if (wing) {
+		instanceMatrix = mult(modelViewMatrix, translate(-3.0, 0.2, 0.0) );
+		instanceMatrix = mult(instanceMatrix, rotate(180, 0, 0, 1));
+		instanceMatrix = mult(instanceMatrix, rotate(45, 0, 1, 0));
+		instanceMatrix = mult(instanceMatrix, rotate(90, 1, 0, 0));
+		instanceMatrix = mult(instanceMatrix, scale4(3.2, 3.2, .42));
+		setModelViewMatrix(instanceMatrix);
+		drawColoredCube(colouredFace(6, vertexColors[1]));
+	} else {
+		instanceMatrix = mult(modelViewMatrix, translate(3.0, 0.2, 0.0) );
+		instanceMatrix = mult(instanceMatrix, rotate(180, 0, 0, 1));
+		instanceMatrix = mult(instanceMatrix, rotate(45, 0, 1, 0));
+		instanceMatrix = mult(instanceMatrix, rotate(90, 1, 0, 0));
+		instanceMatrix = mult(instanceMatrix, scale4(3.2, 3.2, .42));
+		setModelViewMatrix(instanceMatrix);
+		drawColoredCube(colouredFace(6, vertexColors[1]));
+	}
 }
 
 function tri(a, b, c) {
@@ -741,9 +765,9 @@ function defineSliders() {
 	sliders.push({name:"Right Lower Wing Angle", id:rightLowerWingId, min:-90, max:0, val:0})
     sliders.push({name:"Upper Tail Angle", id:upperTailId, min:0, max:90, val:0})
     sliders.push({name:"Lower Tail Angle", id:lowerTailId, min:-60, max:45, val:0})
-	sliders.push({name:"Global X", id:globalXId, min:-50, max:50, val:0})
-	sliders.push({name:"Global Y", id:globalYId, min:-50, max:50, val:0})
-	sliders.push({name:"Global Z", id:globalZId, min:-50, max:50, val:0})
+	sliders.push({name:"Global X", id:globalXId, min:-20, max:20, val:0})
+	sliders.push({name:"Global Y", id:globalYId, min:0, max:20, val:0})
+	sliders.push({name:"Global Z", id:globalZId, min:-20, max:20, val:0})
 }
 
 function initSliders() {
