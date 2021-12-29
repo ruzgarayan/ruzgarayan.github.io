@@ -809,12 +809,10 @@ function initSliders() {
 	}
 	
 	const lightingRatioSlider = document.getElementById("lightingRatioSlider");
-	console.log(lightingRatioSlider);
 	lightingRatioSlider.addEventListener('input', function() {
 		lightingRatio = event.srcElement.value;
 		gl.uniform1f(gl.getUniformLocation(program, 
 		   "lightingRatio"),lightingRatio);
-		   console.log("here");
 	});
 }
 

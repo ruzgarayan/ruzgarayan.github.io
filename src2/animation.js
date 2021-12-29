@@ -2,9 +2,11 @@ var keyframes = [];
 var allFrames = [];
 var keyframeGlobalId = 1;
 
-const framesPerSecond = 60;
+const defaultFramesPerSecond = 60;
+var framesPerSecond = defaultFramesPerSecond;
 const animationSliderMax = 1000;
 
+var speedMultiplier = 1;
 var loopEnabled = false;
 var lastTimeout;
 
@@ -71,6 +73,17 @@ function initAnimationUI() {
 	loopCheckbox.onchange = function(event) {
         loopEnabled = event.target.checked;
     };
+	
+	const speedSlider = document.getElementById("speedSlider");
+	speedSlider.addEventListener('input', function() {
+		
+		clearTimeout(lastTimeout);
+		lastTimeout = null;
+		
+		speedMultiplier = event.srcElement.value;
+		framesPerSecond = defaultFramesPerSecond / speedMultiplier;
+		generateAllFrames();
+	});
 }
 
 function setFrame(frameIndex) {
@@ -103,7 +116,7 @@ function setFrame(frameIndex) {
 
 function playAnimation(currFrameIndex) {
 	if (setFrame(currFrameIndex))
-		lastTimeout = setTimeout(function(){ playAnimation(currFrameIndex + 1) } , 1000/framesPerSecond);
+		lastTimeout = setTimeout(function(){ playAnimation(currFrameIndex + 1) } , 1000/defaultFramesPerSecond);
 	else if (loopEnabled) {
 		updateKeyframeSquares();
 		playAnimation(0);
