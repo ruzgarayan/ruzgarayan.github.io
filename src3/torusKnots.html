@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html>
+
+<script id="vertex-shader-gourad" type="x-shader/x-vertex">
+
+attribute vec4 vPosition;
+attribute vec3 vNormal;
+attribute vec4 vColor;
+varying vec4 fColor;
+
+uniform mat4 modelMatrix;
+uniform mat4 viewMatrix;
+uniform mat4 projectionMatrix;
+
+uniform vec4 lightPosition;
+uniform vec4 lightAmbient, lightDiffuse, lightSpecular;
+uniform float shininess;
+
+varying vec3 R;
+
+void
+main()
+{    
+	mat4 modelViewMatrix = viewMatrix * modelMatrix;
+
+	vec3 pos = (modelMatrix*vPosition).xyz;
+	vec3 L = normalize(lightPosition.xyz - pos);
+	vec3 E = -normalize(pos);
+	vec3 H = normalize(L+E);
+	vec3 N = normalize(modelMatrix*vec4(vNormal, 0.0)).xyz;
+    // Compute terms in the illumination equation
+    vec4 ambient = lightAmbient * vColor;
+    vec4 diffuseProduct = lightDiffuse * vColor;
+    vec4 specularProduct = lightSpecular * vColor;
+
+    float Kd = max( dot(L, N), 0.0 );
+    vec4  diffuse = Kd*diffuseProduct;
+
+    float Ks = pow( max(dot(N, H), 0.0), shininess );
+    vec4  specular = Ks * specularProduct;
+    
+    if( dot(L, N) < 0.0 ) {
+	specular = vec4(0.0, 0.0, 0.0, 1.0);
+    } 
+	
+    R = reflect(E, normalize(modelViewMatrix*vec4(vNormal, 0.0)).xyz);
+	
+    fColor = ambient + diffuse + specular;
+    fColor.a = 1.0;
+	
+    gl_Position = projectionMatrix*modelViewMatrix*vPosition;
+}
+</script>
+
+<script id="fragment-shader-gourad" type="x-shader/x-fragment">
+
+precision mediump float;
+varying vec4 fColor;
+
+varying vec3 R;
+uniform samplerCube environmentCube;
+uniform bool useEnvironmentMapping;
+
+void main()
+{
+	vec4 fragmentColor = textureCube(environmentCube, -R);
+	if (useEnvironmentMapping) {
+		gl_FragColor = fColor * fragmentColor;
+	} else {
+		gl_FragColor = fColor;
+	}
+}
+</script>
+
+
+<script id="vertex-shader-phong" type="x-shader/x-vertex">
+
+attribute vec4 vPosition;
+attribute vec3 vNormal;
+attribute vec4 vColor;
+varying vec4 fColor;
+varying vec3 N, L, E;
+
+uniform mat4 modelMatrix;
+uniform mat4 viewMatrix;
+uniform mat4 projectionMatrix;
+
+uniform vec4 lightPosition;
+
+varying vec3 R;
+
+void
+main()
+{    
+	mat4 modelViewMatrix = viewMatrix * modelMatrix;
+
+	vec3 pos = (modelViewMatrix*vPosition).xyz;
+	L = normalize(lightPosition.xyz - pos);
+	E = -normalize(pos);
+	N = normalize(modelMatrix*vec4(vNormal, 0.0)).xyz;
+	
+    R = reflect(E, normalize(modelViewMatrix*vec4(vNormal, 0.0)).xyz);
+	
+    fColor = vColor;
+    gl_Position = projectionMatrix*modelViewMatrix*vPosition;
+}
+</script>
+
+<script id="fragment-shader-phong" type="x-shader/x-fragment">
+
+precision mediump float;
+
+uniform vec4 lightAmbient, lightDiffuse, lightSpecular;
+uniform float shininess;
+varying vec3 N, L, E;
+varying vec4 fColor;
+
+varying vec3 R;
+uniform samplerCube environmentCube;
+uniform bool useEnvironmentMapping;
+
+void main()
+{
+    vec3 H = normalize( L + E );
+    // Compute terms in the illumination equation
+    vec4 ambient = lightAmbient * fColor;
+    vec4 diffuseProduct = lightDiffuse * fColor;
+    vec4 specularProduct = lightSpecular * fColor;
+
+    float Kd = max( dot(L, N), 0.0 );
+    vec4  diffuse = Kd*diffuseProduct;
+
+    float Ks = pow( max(dot(N, H), 0.0), shininess );
+    vec4  specular = Ks * specularProduct;
+    
+    if( dot(L, N) < 0.0 ) {
+	specular = vec4(0.0, 0.0, 0.0, 1.0);
+    } 
+	
+    vec4 fColor2 = ambient + diffuse + specular;
+    fColor2.a = 1.0;
+
+	vec4 fragmentColor = textureCube(environmentCube, -R);
+
+	if (useEnvironmentMapping) {
+		gl_FragColor = fColor2 * fragmentColor;
+	} else {
+		gl_FragColor = fColor2;
+	}
+}
+</script>
+
+<script id="vertex-shader-wireframe" type="x-shader/x-vertex">
+
+attribute vec4 vPosition;
+
+uniform mat4 modelMatrix;
+uniform mat4 viewMatrix;
+uniform mat4 projectionMatrix;
+
+void
+main()
+{
+    gl_Position = projectionMatrix*viewMatrix*modelMatrix*vPosition;
+}
+</script>
+
+<script id="fragment-shader-wireframe" type="x-shader/x-fragment">
+
+precision mediump float;
+
+void
+main()
+{
+    gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
+}
+</script>
+
+
+<script id="vertex-shader-environment" type="x-shader/x-vertex">
+
+attribute vec4 vPosition;
+
+uniform mat4 modelMatrix;
+uniform mat4 viewMatrix;
+uniform mat4 projectionMatrix;
+
+void
+main()
+{
+    gl_Position = projectionMatrix*viewMatrix*modelMatrix*vPosition;
+}
+</script>
+
+<script id="fragment-shader-environment" type="x-shader/x-fragment">
+
+precision mediump float;
+
+void
+main()
+{
+    gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
+}
+</script>
+
+<script type="text/javascript" src="../Common/webgl-utils.js"></script>
+<script type="text/javascript" src="../Common/initShaders.js"></script>
+<script type="text/javascript" src="../Common/MV.js"></script>
+<script type="text/javascript" src="torusKnots.js"></script>
+<link rel='stylesheet' href='./styles.css' type='text/css' />
+
+<body>
+<div class="container">
+
+<div class="CanvasDiv">
+	<canvas id="gl-canvas" width="800" height="600">
+	Oops ... your browser doesn't support the HTML5 canvas element
+	</canvas>
+</div>
+
+<div class="ButtonsDiv">
+<button id="button-gourad">Gourad</button>
+<button id="button-phong">Phong</button>
+<button id="button-wireframe">Wireframe</button>
+<br/><br/>
+<button id="button-toggle-rotation">Toggle Rotation</button>
+<button id="button-toggle-environment">Toggle Environment Mapping</button>
+<br/>
+<p>Environment: </p>
+<button id="button-city-environment">City</button>
+<button id="button-water-environment">Water</button>
+<button id="button-park-environment">Park</button>
+<button id="button-museum-environment">Museum</button>
+<br/>
+</div>
+
+<div class="ParametersDiv">
+	<h2>Curve equation is:</h2>
+	<h4>X(t) = cos([P] * t) * ([Main Radius] + [R1] * cos([Q1] * t) + [R2] * cos([Q2] * t))</h4>
+	<h4>Y(t) = sin([P] * t) * ([Main Radius] + [R1] * cos([Q1] * t) + [R2] * cos([Q2] * t))</h4>
+	<h4>Z(t) = [R3] * sin([Q1] * t)</h4>
+
+	<br/>
+	P 0 <input type="range" id="slider-p" name="slider-p" min="0" max="10" step="1" value="1"> 10
+	Q1 0 <input type="range" id="slider-q1" name="slider-q1" min="0" max="10" step="1" value="1"> 10
+	Q2 0 <input type="range" id="slider-q2" name="slider-q2" min="0" max="10" step="1" value="1"> 10
+	<br/>
+	R1 0 <input type="range" id="slider-r1" name="slider-r1" min="0" max="10" step="1" value="1"> 10
+	R2 0 <input type="range" id="slider-r2" name="slider-r2" min="0" max="10" step="1" value="1"> 10
+	R3 0 <input type="range" id="slider-r3" name="slider-r3" min="0" max="10" step="1" value="1"> 10
+	<br/>
+	Main Radius 0.1 <input type="range" id="slider-mainRadius" name="slider-mainRadius" min="0.1" max="10" step="0.01" value="1"> 10
+	Tube Radius 0.1 <input type="range" id="slider-tubeRadius" name="slider-tubeRadius" min="0.1" max="1" step="0.01" value="0.1"> 1
+	<br/>
+	Tube Step 5 <input type="range" id="slider-tubeStep" name="slider-tubeStep" min="5" max="100" step="1" value="10"> 100
+	Path Step 5 <input type="range" id="slider-pathStep" name="slider-pathStep" min="5" max="1000" step="1" value="100"> 1000
+</div>
+
+</div>
+</body>
+</html>

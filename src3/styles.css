@@ -1,0 +1,18 @@
+/*General grid*/
+.container {
+  display: grid;
+  grid-template-columns: 400px 400px 800px;
+  grid-template-rows: 288px 288px 288px;
+  gap: 20px 10px;
+  grid-auto-flow: row;
+  grid-template-areas:
+    "CanvasDiv CanvasDiv ParametersDiv"
+    "CanvasDiv CanvasDiv ParametersDiv"
+    "ButtonsDiv ButtonsDiv ButtonsDiv";
+}
+
+.CanvasDiv { grid-area: CanvasDiv; }
+
+.ParametersDiv { grid-area: ParametersDiv; }
+
+.ButtonsDiv { grid-area: ButtonsDiv; }
