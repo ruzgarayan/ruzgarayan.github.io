@@ -53,13 +53,7 @@ var rotationEnabled = false;
 var vertexColors = [
     vec4(215/256, 197/256, 185/256, 1.0),  // DUN(E)
     vec4(232/256, 191/256, 169/256, 1.0),  // GOLD CHAMPAGNE
-    vec4(0.0, 1.0, 0.0, 1.0),  // GREEN
-    vec4(248/256, 241/256, 231/256, 1.0),  // CARAMELLO
-    vec4(169/256, 149/256, 128/256, 1.0),// magenta
-    vec4(0.8, 0.81, 0.52, 1.0),  // grey
-    vec4(1, 1, 0.87, 1.0),// WHITE
-	vec4(231/256, 203/256, 153/256, 1.0),//BUCK
-    vec4(242/256, 227/256, 227/256, 1.0),//Palomino
+    vec4(192/256, 192/256, 192/256, 1.0),  // Metallic
 ];
 
 // 0 => Per vertex shading
@@ -210,7 +204,7 @@ function generateTorusKnot() {
 			
 			pointsArray[i].push(mappedPoint.vertex);
 			normalsArray[i].push(mappedPoint.normal);
-			colorsArray.push(vertexColors[0]);
+			colorsArray.push(vertexColors[2]);
 		}
 		i++;
 	}
