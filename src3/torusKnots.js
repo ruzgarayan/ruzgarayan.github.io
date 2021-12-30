@@ -44,7 +44,7 @@ var lightSpecular = vec4( 1.0, 1.0, 1.0, 1.0 );
 var shininess = 10.0;
 
 //Torus knot variables
-var p = 1, q1 = 1, q2 = 1;
+var p = 1, q1 = 1, q2 = 1, q3 = 1;
 var r1 = 1, r2 = 1, r3 = 1;
 var tubeStep = 10, pathStep = 100;
 var mainRadius = 1, tubeRadius = 0.1; 
@@ -68,6 +68,22 @@ var vertexColors = [
 var renderingMode = 0;
 var useEnvironmentMapping = false;
 
+const presets = [
+{	p:2, q1:5, q2:10, q3:5, mainRadius:1, r1:0.6, r2:0.75, r3:0.35, tubeRadius: 0.1, tubeStep: 50, pathStep: 500	},
+{	p:2, q1:9, q2:3, q3:9, mainRadius:1, r1:0.4, r2:0.45, r3:0.2, tubeRadius: 0.1, tubeStep: 50, pathStep: 500	},
+{	p:3, q1:5, q2:10, q3:20, mainRadius:1, r1:0.3, r2:0.5, r3:0.2, tubeRadius: 0.05, tubeStep: 50, pathStep: 500	},
+{	p:3, q1:4, q2:16, q3:20, mainRadius:1, r1:0.35, r2:0.25, r3:0.2, tubeRadius: 0.05, tubeStep: 50, pathStep: 500	},
+{	p:4, q1:5, q2:20, q3:15, mainRadius:1, r1:0.5, r2:0.4, r3:0.35, tubeRadius: 0.05, tubeStep: 50, pathStep: 500	},
+{	p:3, q1:4, q2:12, q3:8, mainRadius:1, r1:-0.5, r2:0.75, r3:0.3, tubeRadius: 0.1, tubeStep: 50, pathStep: 500	},
+{	p:3, q1:5, q2:15, q3:10, mainRadius:1, r1:-0.5, r2:0.75, r3:0.35, tubeRadius: 0.1, tubeStep: 50, pathStep: 500	},
+{	p:2, q1:7, q2:9, q3:9, mainRadius:1, r1:0.4, r2:0.485, r3:0.3, tubeRadius: 0.1, tubeStep: 50, pathStep: 500	},
+{	p:3, q1:7, q2:9, q3:14, mainRadius:1, r1:0.4, r2:0.485, r3:0.2, tubeRadius: 0.1, tubeStep: 50, pathStep: 500	},
+{	p:3, q1:2, q2:8, q3:16, mainRadius:1, r1:0.175, r2:0.5, r3:0.15, tubeRadius: 0.1, tubeStep: 50, pathStep: 500	},
+{	p:3, q1:2, q2:5, q3:4, mainRadius:1, r1:0.65, r2:0.36, r3:0.2, tubeRadius: 0.1, tubeStep: 50, pathStep: 500	},
+{	p:3, q1:2, q2:10, q3:8, mainRadius:1, r1:0.5, r2:0.75, r3:0.2, tubeRadius: 0.1, tubeStep: 50, pathStep: 500	},
+{	p:1, q1:1, q2:2, q3:1, mainRadius:1, r1:0.5, r2:0, r3:0.5, tubeRadius: 0.4, tubeStep: 50, pathStep: 500	},
+]
+
 function triangle(a, b, c) {
 	indices.push(a);
 	indices.push(b);
@@ -85,13 +101,13 @@ function vertexOnTorusKnot(t, s) {
 	const x = [
 		Math.cos(p * t) * (mainRadius + r1 * Math.cos(q1 * t) + r2 * Math.cos(q2 * t)),
 		Math.sin(p * t) * (mainRadius + r1 * Math.cos(q1 * t) + r2 * Math.cos(q2 * t)),
-		r3 * Math.sin(q1 * t)
+		r3 * Math.sin(q3 * t)
 	]; 
 	
 	const firstDerivative = [
 		(p * -Math.sin(p * t) * (mainRadius + r1 * Math.cos(q1 * t) + r2 * Math.cos(q2 * t))) + Math.cos(p * t) * (r1 * q1 * -Math.sin(q1 * t) + q2 * r2 * -Math.sin(q2 * t)),
 		(p * Math.cos(p * t) * (mainRadius + r1 * Math.cos(q1 * t) + r2 * Math.cos(q2 * t))) + Math.sin(p * t) * (r1 * q1 * -Math.sin(q1 * t) + q2 * r2 * -Math.sin(q2 * t)),
-		r3 * q1 * Math.cos(q1 * t)
+		r3 * q3 * Math.cos(q3 * t)
 	]; 
 	
 	const secondDerivative = [
@@ -109,7 +125,7 @@ function vertexOnTorusKnot(t, s) {
 		
 		,
 		
-		r3 * q1 * q1 * -Math.sin(q1 * t)
+		r3 * q3 * q3 * -Math.sin(q3 * t)
 	]; 
 	
 	const b = cross(firstDerivative, secondDerivative);
@@ -229,8 +245,6 @@ window.onload = function init() {
     gl.viewport( 0, 0, canvas.width, canvas.height );
     gl.clearColor( 1.0, 1.0, 1.0, 1.0 );
     
-    generateTorusKnot();
-
 	changeRenderingMode(renderingMode);
 	gl.enable(gl.DEPTH_TEST);
 	
@@ -238,7 +252,52 @@ window.onload = function init() {
 	initUI();
 	loadCubeMap("Water");
 	
+	//Torus is generated inside this function
+	setPreset(presets[0]);
+	
     render();
+}
+
+function setPreset(preset) {
+	const pSlider = document.getElementById("slider-p");
+	const q1Slider = document.getElementById("slider-q1");
+	const q2Slider = document.getElementById("slider-q2");
+	const q3Slider = document.getElementById("slider-q3");
+	const r1Slider = document.getElementById("slider-r1");
+	const r2Slider = document.getElementById("slider-r2");
+	const r3Slider = document.getElementById("slider-r3");
+	const mainRadiusSlider = document.getElementById("slider-mainRadius");
+	const tubeRadiusSlider = document.getElementById("slider-tubeRadius");
+	const tubeStepSlider = document.getElementById("slider-tubeStep");
+	const pathStepSlider = document.getElementById("slider-pathStep");
+	
+	p = preset.p;
+	pSlider.value = p;
+	q1 = preset.q1;
+	q1Slider.value = q1;
+	q2 = preset.q2;
+	q2Slider.value = q2;
+	q3 = preset.q3;
+	q3Slider.value = q3;
+	
+	r1 = preset.r1;
+	r1Slider.value = r1;
+	r2 = preset.r2;
+	r2Slider.value = r2;
+	r3 = preset.r3;
+	r3Slider.value = r3;
+	
+	mainRadius = preset.mainRadius;
+	mainRadiusSlider.value = mainRadius;
+	tubeRadius = preset.tubeRadius;
+	tubeRadiusSlider.value = tubeRadius;
+	
+	tubeStep = preset.tubeStep;
+	tubeStepSlider.value = tubeStep;
+	pathStep = preset.pathStep;
+	pathStepSlider.value = pathStep;
+	
+	afterParameterUpdate();
 }
 
 function initUI() {
@@ -257,10 +316,12 @@ function initUI() {
 	const buttonWaterEnvironment = document.getElementById("button-water-environment");
 	const buttonParkEnvironment = document.getElementById("button-park-environment");
 	const buttonMuseumEnvironment = document.getElementById("button-museum-environment");
+	const buttonWorldEnvironment = document.getElementById("button-museum-world");
 	buttonCityEnvironment.addEventListener('click', function() {loadCubeMap("City")});
 	buttonWaterEnvironment.addEventListener('click', function() {loadCubeMap("Water")});
 	buttonParkEnvironment.addEventListener('click', function() {loadCubeMap("Park")});
 	buttonMuseumEnvironment.addEventListener('click', function() {loadCubeMap("Museum")});
+	buttonWorldEnvironment.addEventListener('click', function() {loadCubeMap("World")});
 	
 	
 	const mainRadiusSlider = document.getElementById("slider-mainRadius");
@@ -271,9 +332,11 @@ function initUI() {
 	const pSlider = document.getElementById("slider-p");
 	const q1Slider = document.getElementById("slider-q1");
 	const q2Slider = document.getElementById("slider-q2");
+	const q3Slider = document.getElementById("slider-q3");
 	pSlider.addEventListener('input', function() {p = parseFloat(event.srcElement.value); afterParameterUpdate();});
 	q1Slider.addEventListener('input', function() {q1 = parseFloat(event.srcElement.value); afterParameterUpdate();});
 	q2Slider.addEventListener('input', function() {q2 = parseFloat(event.srcElement.value); afterParameterUpdate();});
+	q3Slider.addEventListener('input', function() {q3 = parseFloat(event.srcElement.value); afterParameterUpdate();});
 	
 	const r1Slider = document.getElementById("slider-r1");
 	const r2Slider = document.getElementById("slider-r2");
@@ -286,6 +349,10 @@ function initUI() {
 	const pathStepSlider = document.getElementById("slider-pathStep");
 	tubeStepSlider.addEventListener('input', function() {tubeStep = parseFloat(event.srcElement.value); afterParameterUpdate();});
 	pathStepSlider.addEventListener('input', function() {pathStep = parseFloat(event.srcElement.value); afterParameterUpdate();});
+	
+	document.getElementById("Presets").onclick = function( event) {
+        setPreset(presets[event.srcElement.index]);  
+	};
 }
 
 // 0 => Per vertex shading
@@ -430,12 +497,6 @@ function render() {
 }
 
 
-function renderEnvironment() {
-	gl.useProgram(programEnvironment);
-	
-}
-
-
 function loadCubeMap(environmentType) {
     var texture = gl.createTexture();
     gl.bindTexture(gl.TEXTURE_CUBE_MAP, texture);
@@ -476,6 +537,13 @@ function loadCubeMap(environmentType) {
                  {url: "https://i.ibb.co/XDSn4Zj/neg-y.jpg", side: gl.TEXTURE_CUBE_MAP_NEGATIVE_Y},
                  {url: "https://i.ibb.co/Ld5Xk45/pos-z.jpg", side: gl.TEXTURE_CUBE_MAP_POSITIVE_Z},
                  {url: "https://i.ibb.co/vmtZyM3/neg-z.jpg", side: gl.TEXTURE_CUBE_MAP_NEGATIVE_Z}];
+	} else if (environmentType === "World") {
+		var faces = [{url: "https://i.ibb.co/B2vKDq2/posx.jpg", side: gl.TEXTURE_CUBE_MAP_POSITIVE_X},
+                 {url: "https://i.ibb.co/F3NgJtV/negx.jpg", side: gl.TEXTURE_CUBE_MAP_NEGATIVE_X},
+                 {url: "https://i.ibb.co/6vLVxLX/posy.jpg", side: gl.TEXTURE_CUBE_MAP_POSITIVE_Y},
+                 {url: "https://i.ibb.co/xhbwsML/negy.jpg", side: gl.TEXTURE_CUBE_MAP_NEGATIVE_Y},
+                 {url: "https://i.ibb.co/gydsnQJ/posz.jpg", side: gl.TEXTURE_CUBE_MAP_POSITIVE_Z},
+                 {url: "https://i.ibb.co/dPLMqgz/negz.jpg", side: gl.TEXTURE_CUBE_MAP_NEGATIVE_Z}];
 	}
 				 
     for (var i = 0; i < faces.length; i++) {
