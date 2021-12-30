@@ -53,8 +53,10 @@ var rotationEnabled = false;
 var vertexColors = [
     vec4(215/256, 197/256, 185/256, 1.0),  // DUN(E)
     vec4(232/256, 191/256, 169/256, 1.0),  // GOLD CHAMPAGNE
-    vec4(192/256, 192/256, 192/256, 1.0),  // Metallic
+    vec4(187/256, 194/256, 204/256, 1.0),  // Metallic
 ];
+
+var materialColor = vertexColors[2];
 
 // 0 => Per vertex shading
 // 1 => Per fragment shading
@@ -204,7 +206,7 @@ function generateTorusKnot() {
 			
 			pointsArray[i].push(mappedPoint.vertex);
 			normalsArray[i].push(mappedPoint.normal);
-			colorsArray.push(vertexColors[2]);
+			colorsArray.push(materialColor);
 		}
 		i++;
 	}
@@ -347,6 +349,25 @@ function initUI() {
 	document.getElementById("Presets").onclick = function( event) {
         setPreset(presets[event.srcElement.index]);  
 	};
+	
+	const colorPicker = document.getElementById("color");
+	colorPicker.addEventListener('input', function() {
+		//From https://stackoverflow.com/questions/5623838/rgb-to-hex-and-hex-to-rgb
+		function hexToRgb(hex) {
+		  var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+		  return result ? {
+			r: parseInt(result[1], 16),
+			g: parseInt(result[2], 16),
+			b: parseInt(result[3], 16)
+		  } : null;
+		}
+		const rgb = hexToRgb(event.srcElement.value);
+		materialColor = vec4(rgb.r / 256, rgb.g / 256, rgb.b / 256 ,1.0);
+		afterParameterUpdate();
+	})
+	
+	const buttonDefaultColor = document.getElementById("default-color");
+	buttonDefaultColor.addEventListener('click', function() {materialColor = vertexColors[2]; afterParameterUpdate();});
 }
 
 // 0 => Per vertex shading
