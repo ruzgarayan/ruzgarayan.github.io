@@ -231,6 +231,7 @@ main()
 <button id="button-water-environment">Water</button>
 <button id="button-park-environment">Park</button>
 <button id="button-museum-environment">Museum</button>
+<button id="button-museum-world">World</button>
 <br/>
 </div>
 
@@ -238,22 +239,42 @@ main()
 	<h2>Curve equation is:</h2>
 	<h4>X(t) = cos([P] * t) * ([Main Radius] + [R1] * cos([Q1] * t) + [R2] * cos([Q2] * t))</h4>
 	<h4>Y(t) = sin([P] * t) * ([Main Radius] + [R1] * cos([Q1] * t) + [R2] * cos([Q2] * t))</h4>
-	<h4>Z(t) = [R3] * sin([Q1] * t)</h4>
+	<h4>Z(t) = [R3] * sin([Q3] * t)</h4>
 
 	<br/>
-	P 0 <input type="range" id="slider-p" name="slider-p" min="0" max="10" step="1" value="1"> 10
-	Q1 0 <input type="range" id="slider-q1" name="slider-q1" min="0" max="10" step="1" value="1"> 10
-	Q2 0 <input type="range" id="slider-q2" name="slider-q2" min="0" max="10" step="1" value="1"> 10
+	P 0 <input type="range" id="slider-p" name="slider-p" min="0" max="20" step="1" value="1"> 20
+	Q1 0 <input type="range" id="slider-q1" name="slider-q1" min="0" max="20" step="1" value="1"> 20
+	Q2 0 <input type="range" id="slider-q2" name="slider-q2" min="0" max="20" step="1" value="1"> 20
+	Q3 0 <input type="range" id="slider-q3" name="slider-q3" min="0" max="20" step="1" value="1"> 20
 	<br/>
-	R1 0 <input type="range" id="slider-r1" name="slider-r1" min="0" max="10" step="1" value="1"> 10
-	R2 0 <input type="range" id="slider-r2" name="slider-r2" min="0" max="10" step="1" value="1"> 10
-	R3 0 <input type="range" id="slider-r3" name="slider-r3" min="0" max="10" step="1" value="1"> 10
+	R1 -5 <input type="range" id="slider-r1" name="slider-r1" min="-5" max="5" step="0.01" value="1"> 5
+	R2 -5 <input type="range" id="slider-r2" name="slider-r2" min="-5" max="5" step="0.01" value="1"> 5
+	R3 -5 <input type="range" id="slider-r3" name="slider-r3" min="-5" max="5" step="0.01" value="1"> 5
 	<br/>
 	Main Radius 0.1 <input type="range" id="slider-mainRadius" name="slider-mainRadius" min="0.1" max="10" step="0.01" value="1"> 10
 	Tube Radius 0.1 <input type="range" id="slider-tubeRadius" name="slider-tubeRadius" min="0.1" max="1" step="0.01" value="0.1"> 1
 	<br/>
 	Tube Step 5 <input type="range" id="slider-tubeStep" name="slider-tubeStep" min="5" max="100" step="1" value="10"> 100
 	Path Step 5 <input type="range" id="slider-pathStep" name="slider-pathStep" min="5" max="1000" step="1" value="100"> 1000
+	
+	<h2>Presets</h2>
+	<select id="Presets" size="13">
+		<optgroup style="font-size:20px;">
+			<option value="0">Preset 1</option>
+			<option value="1">Preset 2</option>
+			<option value="2">Preset 3</option>
+			<option value="3">Preset 4</option>
+			<option value="4">Preset 5</option>
+			<option value="5">Preset 6</option>
+			<option value="6">Preset 7</option>
+			<option value="7">Preset 8</option>
+			<option value="8">Preset 9</option>
+			<option value="9">Preset 10</option>
+			<option value="10">Preset 11</option>
+			<option value="11">Preset 12</option>
+			<option value="12">Env Mapping Preset</option>
+		</optgroup>
+	</select>
 </div>
 
 </div>
