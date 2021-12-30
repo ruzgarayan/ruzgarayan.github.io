@@ -524,42 +524,13 @@ function loadCubeMap(environmentType) {
 	gl.texParameteri(gl.TEXTURE_CUBE_MAP,gl.TEXTURE_MAG_FILTER,gl.NEAREST);
     gl.texParameteri(gl.TEXTURE_CUBE_MAP,gl.TEXTURE_MIN_FILTER,gl.NEAREST);
 	
-	if (environmentType === "City") {
-		var faces = [{url: "https://i.ibb.co/s677qvg/pos-x.png", side: gl.TEXTURE_CUBE_MAP_POSITIVE_X},
-				 {url: "https://i.ibb.co/TbFZ9K1/neg-x.png", side: gl.TEXTURE_CUBE_MAP_NEGATIVE_X},
-                 {url: "https://i.ibb.co/vCF2BPJ/pos-y.png", side: gl.TEXTURE_CUBE_MAP_POSITIVE_Y},
-                 {url: "https://i.ibb.co/bPXnYb8/neg-y.png", side: gl.TEXTURE_CUBE_MAP_NEGATIVE_Y},
-                 {url: "https://i.ibb.co/BtS73xh/pos-z.png", side: gl.TEXTURE_CUBE_MAP_POSITIVE_Z},
-                 {url: "https://i.ibb.co/QXnX10q/neg-z.png", side: gl.TEXTURE_CUBE_MAP_NEGATIVE_Z}];
-	} else if (environmentType === "Water") {
-		var faces = [{url: "https://i.ibb.co/zN5fvR9/posx.jpg", side: gl.TEXTURE_CUBE_MAP_POSITIVE_X},
-                 {url: "https://i.ibb.co/HH6DwpN/negx.jpg", side: gl.TEXTURE_CUBE_MAP_NEGATIVE_X},
-                 {url: "https://i.ibb.co/cTTdLJR/posy.jpg", side: gl.TEXTURE_CUBE_MAP_POSITIVE_Y},
-                 {url: "https://i.ibb.co/MPWcvpc/negy.jpg", side: gl.TEXTURE_CUBE_MAP_NEGATIVE_Y},
-                 {url: "https://i.ibb.co/JF7Q6HF/posz.jpg", side: gl.TEXTURE_CUBE_MAP_POSITIVE_Z},
-                 {url: "https://i.ibb.co/5BR1rbk/negz.jpg", side: gl.TEXTURE_CUBE_MAP_NEGATIVE_Z}];
-	} else if (environmentType === "Park") {
-		var faces = [{url: "https://i.ibb.co/myBKrBs/posx.jpg", side: gl.TEXTURE_CUBE_MAP_POSITIVE_X},
-                 {url: "https://i.ibb.co/vqnT4XB/negx.jpg", side: gl.TEXTURE_CUBE_MAP_NEGATIVE_X},
-                 {url: "https://i.ibb.co/4R7G2XS/posy.jpg", side: gl.TEXTURE_CUBE_MAP_POSITIVE_Y},
-                 {url: "https://i.ibb.co/Qn79QDx/negy.jpg", side: gl.TEXTURE_CUBE_MAP_NEGATIVE_Y},
-                 {url: "https://i.ibb.co/Jc2WBvV/posz.jpg", side: gl.TEXTURE_CUBE_MAP_POSITIVE_Z},
-                 {url: "https://i.ibb.co/yywxNn9/negz.jpg", side: gl.TEXTURE_CUBE_MAP_NEGATIVE_Z}];
-	} else if (environmentType === "Museum") {
-		var faces = [{url: "https://i.ibb.co/3TKCnW1/pos-x.jpg", side: gl.TEXTURE_CUBE_MAP_POSITIVE_X},
-                 {url: "https://i.ibb.co/3kRfN8d/neg-x.jpg", side: gl.TEXTURE_CUBE_MAP_NEGATIVE_X},
-                 {url: "https://i.ibb.co/DMzTskj/pos-y.jpg", side: gl.TEXTURE_CUBE_MAP_POSITIVE_Y},
-                 {url: "https://i.ibb.co/XDSn4Zj/neg-y.jpg", side: gl.TEXTURE_CUBE_MAP_NEGATIVE_Y},
-                 {url: "https://i.ibb.co/Ld5Xk45/pos-z.jpg", side: gl.TEXTURE_CUBE_MAP_POSITIVE_Z},
-                 {url: "https://i.ibb.co/vmtZyM3/neg-z.jpg", side: gl.TEXTURE_CUBE_MAP_NEGATIVE_Z}];
-	} else if (environmentType === "World") {
-		var faces = [{url: "https://i.ibb.co/B2vKDq2/posx.jpg", side: gl.TEXTURE_CUBE_MAP_POSITIVE_X},
-                 {url: "https://i.ibb.co/F3NgJtV/negx.jpg", side: gl.TEXTURE_CUBE_MAP_NEGATIVE_X},
-                 {url: "https://i.ibb.co/6vLVxLX/posy.jpg", side: gl.TEXTURE_CUBE_MAP_POSITIVE_Y},
-                 {url: "https://i.ibb.co/xhbwsML/negy.jpg", side: gl.TEXTURE_CUBE_MAP_NEGATIVE_Y},
-                 {url: "https://i.ibb.co/gydsnQJ/posz.jpg", side: gl.TEXTURE_CUBE_MAP_POSITIVE_Z},
-                 {url: "https://i.ibb.co/dPLMqgz/negz.jpg", side: gl.TEXTURE_CUBE_MAP_NEGATIVE_Z}];
-	}
+	var faces = [{url: "https://ruzgarayan.github.io/torusKnots/images/"+environmentType+"/posx.jpg", side: gl.TEXTURE_CUBE_MAP_POSITIVE_X},
+			 {url: "https://ruzgarayan.github.io/torusKnots/images/"+environmentType+"/negx.jpg", side: gl.TEXTURE_CUBE_MAP_NEGATIVE_X},
+			 {url: "https://ruzgarayan.github.io/torusKnots/images/"+environmentType+"/posy.jpg", side: gl.TEXTURE_CUBE_MAP_POSITIVE_Y},
+			 {url: "https://ruzgarayan.github.io/torusKnots/images/"+environmentType+"/negy.jpg", side: gl.TEXTURE_CUBE_MAP_NEGATIVE_Y},
+			 {url: "https://ruzgarayan.github.io/torusKnots/images/"+environmentType+"/posz.jpg", side: gl.TEXTURE_CUBE_MAP_POSITIVE_Z},
+			 {url: "https://ruzgarayan.github.io/torusKnots/images/"+environmentType+"/negz.jpg", side: gl.TEXTURE_CUBE_MAP_NEGATIVE_Z}
+			 ];
 				 
     for (var i = 0; i < faces.length; i++) {
         var side = faces[i].side;
